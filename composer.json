@@ -1,0 +1,19 @@
+{
+    "name": "zb/cart-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony2 Ecommerce Cart Bundle.",
+    "keywords": ["ecommerce", "cart"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zac Ball",
+            "email": "zacball29@yahoo.com"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "~2.3",
+    }
+    "autoload": {
+        "psr-4":  { "ZB\\CartBundle\\": "" }
+    }
+}
