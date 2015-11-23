@@ -24,5 +24,9 @@ class ZBCartExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+        
+        $classes = $config['classes'];
+        
+        $container->setParameter('zb_cart.cart.entity', $classes['cart']['model']);
     }
 }
