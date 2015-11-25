@@ -13,7 +13,15 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        echo 'yo'; exit;
-        return array('name' => $name);
+        $cart = $this->getCart();
+        
+        return $this->render('default/index.html.twig', array(
+            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
+            'cart' => $cart
+        ));
+    }
+    
+    public function getCart(){
+        return $this->get('zb_cart.cart_manager')->getCart();
     }
 }

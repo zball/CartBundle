@@ -7,6 +7,7 @@ use ZB\CartBundle\Event\CartEvent;
 use ZB\CartBundle\CartEvents;
 use ZB\CartBundle\Factory\FactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class CartManager implements CartManagerInterface{
     
@@ -17,14 +18,17 @@ class CartManager implements CartManagerInterface{
     public function __construct(
         CartRepository $cartRepository, 
         EventDispatcherInterface $eventDispatcher,
-        FactoryInterface $cartFactory
+        FactoryInterface $cartFactory,
+        Session $session
     ){
         $this->cartRepository = $cartRepository;
         $this->eventDispatcher = $eventDispatcher;
         $this->cartFactory = $cartFactory;
+        $this->session = $session;
     }
     
     public function createNew(){
+        
         $cart = $this->cartFactory->buildNew();
         
         $event = new CartEvent($cart);
@@ -35,5 +39,14 @@ class CartManager implements CartManagerInterface{
     
     public function getCart(){
         
+        if( $this->session->has('zb_cart') ){
+            return $this->session->get('zb_cart');
+        }
+        
+        return $this->createNew();
+    }
+    
+    public function removeCart(){
+        $this->session->clear('zb_cart');
     }
 }

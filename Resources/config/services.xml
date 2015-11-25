@@ -21,6 +21,7 @@
             <argument type="service" id="zb_cart.cart_repository" />
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="zb_cart.cart_factory" />
+            <argument type="service" id="session" />
         </service>
         <service id="zb_cart.event_subscriber" class="ZB\CartBundle\Event\EventSubscriber">
             <tag name="kernel.event_subscriber" />

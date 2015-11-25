@@ -11,6 +11,11 @@ class Factory implements FactoryInterface{
     }
     
     public function buildNew(){
-        return new $this->className();
+        
+        if( class_exists( $this->className ) )
+            return new $this->className();
+        
+        throw new \RuntimeException('Class: ' . $this->className . ' could not be found.');
+        
     }
 }
