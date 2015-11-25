@@ -20,9 +20,13 @@
         <service id="zb_cart.cart_manager" class="ZB\CartBundle\Model\CartManager">
             <argument type="service" id="zb_cart.cart_repository" />
             <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="zb_cart.cart_factory" />
         </service>
         <service id="zb_cart.event_subscriber" class="ZB\CartBundle\Event\EventSubscriber">
             <tag name="kernel.event_subscriber" />
+        </service>
+        <service id="zb_cart.cart_factory" class="ZB\CartBundle\Factory\Factory">
+            <argument>%zb_cart.cart.entity%</argument>
         </service>
     </services>
     

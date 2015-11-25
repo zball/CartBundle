@@ -11,8 +11,6 @@ class CartRepository extends EntityRepository{
         $className = $this->getClassName();
         $cart = new $className();
         
-        
-        
         return $cart; 
     }
 }
