@@ -2,7 +2,7 @@
 
 namespace ZB\CartBundle\Model;
 
-interface ProductInterface{
+interface CartItemInterface{
     
      /**
      * Returns the product unique id.
@@ -10,5 +10,9 @@ interface ProductInterface{
      * @return mixed
      */
     public function getId();
+    
+    public function getQuantity();
+    
+    public function getUnitPrice();
     
 }
