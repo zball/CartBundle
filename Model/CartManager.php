@@ -6,6 +6,7 @@ use ZB\CartBundle\Repository\CartRepository;
 use ZB\CartBundle\Event\CartEvent;
 use ZB\CartBundle\CartEvents;
 use ZB\CartBundle\Factory\FactoryInterface;
+use ZB\CartBundle\Model\CartItemInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -44,6 +45,15 @@ class CartManager implements CartManagerInterface{
         }
         
         return $this->createNew();
+    }
+    
+    public function addCartItem(CartItemInterface $item){
+        $cart = $this->getCart();
+        
+        $cartItems = $cart->getCartItems();
+        $cartItems[] = $item;
+        
+        $cart->setCartItems($cartItems);
     }
     
     public function removeCart(){

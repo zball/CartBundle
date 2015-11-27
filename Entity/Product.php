@@ -2,13 +2,13 @@
 
 namespace ZB\CartBundle\Entity;
 
-use ZB\CartBundle\Model\CartItem as BaseItem;
+use ZB\CartBundle\Model\Product as BaseProduct;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="zb_cart_item")
+ * @ORM\Table(name="zb_cart_product")
  */
-class Item extends BaseItem{
+class Product extends BaseProduct{
     
 }

@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="zb_cart.cart.entity">ZB\CartBundle\Entity\Cart</parameter>
+        <parameter key="zb_cart.cart_item.entity">ZB\CartBundle\Entity\CartItem</parameter>
     </parameters>
     
     <services>
@@ -28,6 +29,12 @@
         </service>
         <service id="zb_cart.cart_factory" class="ZB\CartBundle\Factory\Factory">
             <argument>%zb_cart.cart.entity%</argument>
+        </service>
+        <service id="zb_cart.cart_item_factory" class="ZB\CartBundle\Factory\Factory">
+            <argument>%zb_cart.cart_item.entity%</argument>
+        </service>
+        <service id="zb_cart.item_resolver" class="ZB\CartBundle\Model\CartItemResolver">
+            <argument type="service" id="zb_cart.cart_item_factory" />
         </service>
     </services>
     

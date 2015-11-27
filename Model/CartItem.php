@@ -25,6 +25,11 @@ abstract class CartItem implements CartItemInterface{
      * @ORM\Column(type="float")
      */ 
      protected $unitPrice;
+     
+     /**
+     * @ORM\OneToOne(targetEntity="Product")
+     */
+    protected $product;
     
     /**
      * {@inheritDoc}
@@ -41,6 +46,10 @@ abstract class CartItem implements CartItemInterface{
         return $this->unitPrice;
     }
     
+    public function getProduct(){
+        return $this->product;
+    }
+    
     public function setQuantity($quantity){
         $this->quantity = $quantity;
         
@@ -49,6 +58,12 @@ abstract class CartItem implements CartItemInterface{
     
     public function setUnitPrice($unitPrice){
         $this->unitPrice = $unitPrice;
+        
+        return $this;
+    }
+    
+    public function setProduct(Product $product){
+        $this->product = $product;
         
         return $this;
     }
