@@ -54,9 +54,18 @@ class CartManager implements CartManagerInterface{
         $cartItems[] = $item;
         
         $cart->setCartItems($cartItems);
+        
+        $event = new CartEvent($cart);
+        $this->eventDispatcher->dispatch(CartEvents::ITEM_ADDED, $event);
+        
     }
     
     public function removeCart(){
         $this->session->clear('zb_cart');
+    }
+    
+    public function emptyCart(){
+        $cart = $this->getCart();
+        $cart->setCartItems(array());
     }
 }

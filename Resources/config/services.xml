@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="zb_cart.cart.entity">ZB\CartBundle\Entity\Cart</parameter>
         <parameter key="zb_cart.cart_item.entity">ZB\CartBundle\Entity\CartItem</parameter>
+        <parameter key="zb_cart.product.entity">ZB\CartBundle\Entity\Product</parameter>
     </parameters>
     
     <services>
@@ -17,6 +18,13 @@
             factory-service="doctrine.orm.default_entity_manager"
             factory-method="getRepository">
             <argument>%zb_cart.cart.entity%</argument>
+        </service>
+        <service 
+            id="zb_cart.product_repository" 
+            class="ZB\CartBundle\Repository\ProductRepository"
+            factory-service="doctrine.orm.default_entity_manager"
+            factory-method="getRepository">
+            <argument>%zb_cart.product.entity%</argument>
         </service>
         <service id="zb_cart.cart_manager" class="ZB\CartBundle\Model\CartManager">
             <argument type="service" id="zb_cart.cart_repository" />
@@ -35,6 +43,7 @@
         </service>
         <service id="zb_cart.item_resolver" class="ZB\CartBundle\Model\CartItemResolver">
             <argument type="service" id="zb_cart.cart_item_factory" />
+            <argument type="service" id="zb_cart.product_repository" />
         </service>
     </services>
     
