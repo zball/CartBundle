@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 
 use ZB\CartBundle\Entity\CartItem;
+use ZB\CartBundle\Form\Type\CartItemType;
 
 class DefaultController extends Controller
 {
@@ -18,6 +19,12 @@ class DefaultController extends Controller
     {
         $cartManager = $this->getCartManager();
         $cart = $cartManager->getCart();
+        
+        
+        // foreach($cart->getCartItems() as $cartItem){
+        //     echo $cartItem->getQuantity();
+        // }
+        // exit;
         
         return $this->render('default/index.html.twig', array(
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
@@ -50,21 +57,13 @@ class DefaultController extends Controller
         
         $cartItem = $itemResolver->resolveItem($request);
         
-        $product = $this->getDoctrine()
-            ->getRepository('ZBCartBundle:Product')
-            ->find($product_id);
-            
-        echo '<Pre>';
-        echo $request->get('product_id');
-        exit;
-        //\Doctrine\Common\Util\Debug::dump($request);exit;
-            
         
+        if($cartItem){
+            $cartManager->addCartItem($cartItem);
+            return $this->redirectToRoute('zb_cart_index');
+        }
         
-        // // echo '<Pre>';
-        // // \Doctrine\Common\Util\Debug::dump($cartItem);exit;
-        
-        $cartManager->addCartItem($cartItem);
+        $this->redirect($request->server->get('HTTP_REFERER'));
     }
     
     public function getCartManager(){

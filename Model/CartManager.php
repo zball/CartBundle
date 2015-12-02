@@ -7,6 +7,7 @@ use ZB\CartBundle\Event\CartEvent;
 use ZB\CartBundle\CartEvents;
 use ZB\CartBundle\Factory\FactoryInterface;
 use ZB\CartBundle\Model\CartItemInterface;
+use ZB\CartBundle\Model\ProductInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -48,16 +49,42 @@ class CartManager implements CartManagerInterface{
     }
     
     public function addCartItem(CartItemInterface $item){
-        $cart = $this->getCart();
         
-        $cartItems = $cart->getCartItems();
-        $cartItems[] = $item;
+        if($cartItem = $this->productAlreadyInCart($item->getProduct())){
+            $cartItem->setQuantity($item->getQuantity());
+        }else{
+            $cart = $this->getCart();
+            $cartItems = $cart->getCartItems();
+            $cartItems[] = $item;
+            
+            $cart->setCartItems($cartItems);
+        }
+        // $cart = $this->getCart();
         
-        $cart->setCartItems($cartItems);
+        // $cartItems = $cart->getCartItems();
+        // foreach($cartItems as $cartItem){
+        //     if($item->getProduct() == $cartItem->getProduct()){
+        //         $cartItem->setQuantity($item->getQuantity());
+        //     }else{
+        //         $cartItems[] = $item;
+        //     }
+        // }
+        
+        
+        // $cart->setCartItems($cartItems);
         
         $event = new CartEvent($cart);
         $this->eventDispatcher->dispatch(CartEvents::ITEM_ADDED, $event);
         
+    }
+    
+    public function productAlreadyInCart(ProductInterface $product){
+        foreach($this->getCart()->getCartItems() as $item){
+            if($item->getProduct() == $product){
+                return $item;
+            }
+        }
+        return false;
     }
     
     public function removeCart(){

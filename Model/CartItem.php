@@ -51,7 +51,8 @@ abstract class CartItem implements CartItemInterface{
     }
     
     public function setQuantity($quantity){
-        $this->quantity = $quantity;
+        if(null != $quantity)
+            $this->quantity = $quantity;
         
         return $this;
     }

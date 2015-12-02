@@ -44,6 +44,10 @@
         <service id="zb_cart.item_resolver" class="ZB\CartBundle\Model\CartItemResolver">
             <argument type="service" id="zb_cart.cart_item_factory" />
             <argument type="service" id="zb_cart.product_repository" />
+            <argument type="service" id="form.factory" />
+        </service>
+        <service id="zb_cart_item" class="ZB\CartBundle\Form\Type\CartItemType">
+            <tag name="form.type" />
         </service>
     </services>
     

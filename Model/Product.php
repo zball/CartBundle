@@ -26,6 +26,10 @@ abstract class Product implements ProductInterface{
      */ 
      protected $unitPrice;
      
+     public function getId(){
+         return $this->id;
+     }
+     
      public function getName(){
          return $this->name;
      }

@@ -4,17 +4,25 @@ namespace ZB\CartBundle\Model;
 
 use ZB\CartBundle\Model\ProductInterface;
 use ZB\CartBundle\Factory\FactoryInterface;
+use ZB\CartBundle\Form\Type\CartItemType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\FormFactory;
 use Doctrine\ORM\EntityRepository;
 
 class CartItemResolver{
     
     private $cartItem;
     private $productRepository;
+    private $formFactory;
     
-    public function __construct(FactoryInterface $itemFactory, EntityRepository $productRepository){
+    public function __construct(
+        FactoryInterface $itemFactory, 
+        EntityRepository $productRepository,
+        FormFactory $formFactory
+    ){
         $this->cartItem = $itemFactory->buildNew();
         $this->productRepository = $productRepository;
+        $this->formFactory = $formFactory;
     }
     
     public function resolveItem(Request $request){
@@ -25,16 +33,22 @@ class CartItemResolver{
         if(!$product)
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException("No product by that ID could be located.");
         
-        echo '<pre>';
-        \Doctrine\Common\Util\Debug::dump($product);exit;
+        if(!$product instanceof ProductInterface)
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException("No product provided.");
+            
+        $form = $this->formFactory->create(CartItemType::class, $this->cartItem);
+        $form->handleRequest($request);
+        
+        if($form->isValid()){
+            $this->cartItem->setProduct($product);
+            $this->cartItem->setUnitPrice($product->getUnitPrice());
+            
+            return $this->cartItem;
+        }
+        
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException("Invalid form submission.");
         
         
-        
-        $this->cartItem->setProduct($product);
-        $this->cartItem->setUnitPrice($product->getUnitPrice());
-        $this->cartItem->setQuantity(5);
-        
-        return $this->cartItem;
         
     }
 }
