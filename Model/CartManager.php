@@ -50,28 +50,17 @@ class CartManager implements CartManagerInterface{
     
     public function addCartItem(CartItemInterface $item){
         
+        $cart = $this->getCart();
+        
         if($cartItem = $this->productAlreadyInCart($item->getProduct())){
             $cartItem->setQuantity($item->getQuantity());
         }else{
-            $cart = $this->getCart();
+            
             $cartItems = $cart->getCartItems();
             $cartItems[] = $item;
             
             $cart->setCartItems($cartItems);
         }
-        // $cart = $this->getCart();
-        
-        // $cartItems = $cart->getCartItems();
-        // foreach($cartItems as $cartItem){
-        //     if($item->getProduct() == $cartItem->getProduct()){
-        //         $cartItem->setQuantity($item->getQuantity());
-        //     }else{
-        //         $cartItems[] = $item;
-        //     }
-        // }
-        
-        
-        // $cart->setCartItems($cartItems);
         
         $event = new CartEvent($cart);
         $this->eventDispatcher->dispatch(CartEvents::ITEM_ADDED, $event);

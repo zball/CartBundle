@@ -27,6 +27,8 @@ class ZBCartExtension extends Extension
         
         $classes = $config['classes'];
         
-        $container->setParameter('zb_cart.cart.entity', $classes['cart']['model']);
+        $container->setParameter('zb_cart.cart.entity', $classes['cart']['entity']);
+        $container->setParameter('zb_cart.cart_item.entity', $classes['cart_item']['entity']);
+        $container->setParameter('zb_cart.product.entity', $classes['product']['entity']);
     }
 }
