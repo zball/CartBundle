@@ -8,6 +8,9 @@
         <parameter key="zb_cart.cart.entity"></parameter>
         <parameter key="zb_cart.cart_item.entity"></parameter>
         <parameter key="zb_cart.product.entity"></parameter>
+        <parameter key="zb_cart.cart.manager.class"></parameter>
+        <parameter key="zb_cart.item_resolver.class"></parameter>
+        <parameter key="zb_cart.form.item_type"></parameter>
     </parameters>
     
     <services>
@@ -26,7 +29,7 @@
             factory-method="getRepository">
             <argument>%zb_cart.product.entity%</argument>
         </service>
-        <service id="zb_cart.cart_manager" class="ZB\CartBundle\Model\CartManager">
+        <service id="zb_cart.cart_manager" class="%zb_cart.cart.manager.class%">
             <argument type="service" id="zb_cart.cart_repository" />
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="zb_cart.cart_factory" />
@@ -41,12 +44,14 @@
         <service id="zb_cart.cart_item_factory" class="ZB\CartBundle\Factory\Factory">
             <argument>%zb_cart.cart_item.entity%</argument>
         </service>
-        <service id="zb_cart.item_resolver" class="ZB\CartBundle\Model\CartItemResolver">
+        <service id="zb_cart.item_resolver" class="%zb_cart.item_resolver.class%">
             <argument type="service" id="zb_cart.cart_item_factory" />
             <argument type="service" id="zb_cart.product_repository" />
             <argument type="service" id="form.factory" />
+            <argument type="service" id="zb_cart_item_type" />
         </service>
-        <service id="zb_cart_item" class="ZB\CartBundle\Form\Type\CartItemType">
+        
+        <service id="zb_cart_item_type" class="%zb_cart.form.item_type%">
             <tag name="form.type" />
         </service>
     </services>
