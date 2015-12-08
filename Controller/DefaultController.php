@@ -66,6 +66,19 @@ class DefaultController extends Controller
         $this->redirect($request->server->get('HTTP_REFERER'));
     }
     
+    /**
+     * @Route("/cart/save", name="zb_cart_save")
+     */
+    public function saveAction(Request $request){
+        $cart = $this->getCartManager()->getCart();
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($cart);
+        $em->flush();
+        
+        return $this->redirectToRoute('zb_cart_index');
+    }
+    
     public function getCartManager(){
         return $this->get('zb_cart.cart_manager');
     }

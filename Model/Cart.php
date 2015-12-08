@@ -34,7 +34,8 @@ abstract class Cart implements CartInterface{
     
     public function __construct(){
         $this->createdAt = new \DateTime('now');
-    }
+        $this->setExpiresAt();
+   }
     
     /**
      * {@inheritDoc}
@@ -49,6 +50,11 @@ abstract class Cart implements CartInterface{
     
     public function getCartItems(){
         return $this->cartItems;
+    }
+    
+    public function setExpiresAt(){
+        $this->expiresAt = new \DateTime();
+        $this->expiresAt->modify("+30 days");
     }
     
     public function setCartItems(array $cartItems){

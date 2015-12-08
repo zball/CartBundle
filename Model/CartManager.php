@@ -16,6 +16,7 @@ class CartManager implements CartManagerInterface{
     private $cartRepository;
     private $eventDispatcher;
     private $cartFactory;
+    private $session;
     
     public function __construct(
         CartRepository $cartRepository, 

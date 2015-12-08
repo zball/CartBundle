@@ -13,4 +13,6 @@ interface CartInterface{
     
     public function getCreatedAt();
     
+    public function getCartItems();
+    
 }
