@@ -22,6 +22,7 @@
             factory-method="getRepository">
             <argument>%zb_cart.cart.entity%</argument>
         </service>
+        
         <service 
             id="zb_cart.product_repository" 
             class="ZB\CartBundle\Repository\ProductRepository"
@@ -29,21 +30,26 @@
             factory-method="getRepository">
             <argument>%zb_cart.product.entity%</argument>
         </service>
+        
         <service id="zb_cart.cart_manager" class="%zb_cart.cart.manager.class%">
             <argument type="service" id="zb_cart.cart_repository" />
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="zb_cart.cart_factory" />
-            <argument type="service" id="session" />
+            <argument type="service" id="zb_cart.session_manager" />
         </service>
+        
         <service id="zb_cart.event_subscriber" class="ZB\CartBundle\Event\EventSubscriber">
             <tag name="kernel.event_subscriber" />
         </service>
+        
         <service id="zb_cart.cart_factory" class="ZB\CartBundle\Factory\Factory">
             <argument>%zb_cart.cart.entity%</argument>
         </service>
+        
         <service id="zb_cart.cart_item_factory" class="ZB\CartBundle\Factory\Factory">
             <argument>%zb_cart.cart_item.entity%</argument>
         </service>
+        
         <service id="zb_cart.item_resolver" class="%zb_cart.item_resolver.class%">
             <argument type="service" id="zb_cart.cart_item_factory" />
             <argument type="service" id="zb_cart.product_repository" />
@@ -54,6 +60,11 @@
         <service id="zb_cart_item_type" class="%zb_cart.form.item_type%">
             <tag name="form.type" />
         </service>
+        
+        <service id="zb_cart.session_manager" class="ZB\CartBundle\Model\SessionManager">
+            <argument type="service" id="session" />
+        </service>
+        
     </services>
     
 </container>
