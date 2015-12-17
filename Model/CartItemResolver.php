@@ -4,6 +4,7 @@ namespace ZB\CartBundle\Model;
 
 use ZB\CartBundle\Model\ProductInterface;
 use ZB\CartBundle\Factory\FactoryInterface;
+use ZB\CartBundle\Model\CartInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormFactory;
@@ -28,7 +29,7 @@ class CartItemResolver{
         $this->cartItemType = $cartItemType;
     }
     
-    public function resolveItem(Request $request){
+    public function resolveItem(Request $request, CartInterface $cart){
         
         $productId = $request->get('product_id');
         $product = $this->productRepository->find($productId);
@@ -45,6 +46,7 @@ class CartItemResolver{
         if($form->isValid()){
             $this->cartItem->setProduct($product);
             $this->cartItem->setUnitPrice($product->getUnitPrice());
+            $this->cartItem->setCart($cart);
             
             return $this->cartItem;
         }

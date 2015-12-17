@@ -45,8 +45,13 @@ class CartManager implements CartManagerInterface{
     }
     
     public function getCart(){
-        return ($cart = $this->sessionManager->getCartInSession()) 
-            ? $cart : $this->createNew();
+        if($cartId = $this->sessionManager->hasCartInSession()){
+            $cart = $this->cartRepository->find($cartId);
+        }else{
+            $cart = $this->createNew();
+        }
+        
+        return $cart;
     }
     
     public function setCart(CartInterface $cart){
@@ -62,16 +67,17 @@ class CartManager implements CartManagerInterface{
         $cart = $this->getCart();
         
         if($cartItem = $this->productAlreadyInCart($item->getProduct())){
+            
             $cartItem->setQuantity($item->getQuantity());
+            
+            
             
             $event = new CartEvent($cart);
             $this->eventDispatcher->dispatch(CartEvents::ITEM_UPDATED, $event);
         }else{
             
-            $cartItems = $cart->getCartItems();
-            $cartItems[] = $item;
             
-            $cart->setCartItems($cartItems);
+            $cart->addCartItem($item);
             
             $event = new CartEvent($cart);
             $this->eventDispatcher->dispatch(CartEvents::ITEM_ADDED, $event);

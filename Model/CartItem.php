@@ -27,9 +27,14 @@ abstract class CartItem implements CartItemInterface{
      protected $unitPrice;
      
      /**
-     * @ORM\OneToOne(targetEntity="Product")
+     * @ORM\ManyToOne(targetEntity="Product", cascade={"merge"})
      */
     protected $product;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Cart", inversedBy="cartItems", cascade={"merge"})
+     */
+    protected $cart;
     
     /**
      * {@inheritDoc}
@@ -69,5 +74,13 @@ abstract class CartItem implements CartItemInterface{
         return $this;
     }
     
+    public function setCart(Cart $cart){
+        $this->cart = $cart;
+        return $this;
+    }
+    
+    public function getCart(){
+        return $this->cart;
+    }
     
 }

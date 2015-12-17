@@ -40,6 +40,8 @@
         
         <service id="zb_cart.event_subscriber" class="ZB\CartBundle\Event\EventSubscriber">
             <tag name="kernel.event_subscriber" />
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
+            <argument type="service" id="zb_cart.session_manager" />
         </service>
         
         <service id="zb_cart.cart_factory" class="ZB\CartBundle\Factory\Factory">
@@ -63,6 +65,7 @@
         
         <service id="zb_cart.session_manager" class="ZB\CartBundle\Model\SessionManager">
             <argument type="service" id="session" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
         
     </services>

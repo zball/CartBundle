@@ -17,13 +17,25 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $cartManager = $this->getCartManager();
-        $cart = $cartManager->getCart();
         
         return $this->render('default/index.html.twig', array(
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-            'cart' => $cart
+            'cart' => $this->getCart()
         ));
+    }
+    
+    /**
+     * @Route("/cart/x", name="zb_cart_x")
+     */
+    public function xAction(Request $request)
+    {
+        
+        $session = $request->getSession();
+        $session->remove('zb_cart');
+        
+        print_r($session->get('zb_cart'));
+        exit;
+        
     }
     
     /**
@@ -49,7 +61,7 @@ class DefaultController extends Controller
         $cartManager = $this->getCartManager();
         $itemResolver = $this->get('zb_cart.item_resolver');
         
-        $cartItem = $itemResolver->resolveItem($request);
+        $cartItem = $itemResolver->resolveItem($request, $cartManager->getCart());
         
         
         if($cartItem){
@@ -67,13 +79,21 @@ class DefaultController extends Controller
         $cart = $this->getCartManager()->getCart();
         
         $em = $this->getDoctrine()->getManager();
+        
+        $cart = $em->merge($cart);
         $em->persist($cart);
         $em->flush();
+        
+        $this->get('zb_cart.cart_manager')->setCart($cart);
         
         return $this->redirectToRoute('zb_cart_index');
     }
     
     public function getCartManager(){
         return $this->get('zb_cart.cart_manager');
+    }
+    
+    public function getCart(){
+        return $this->getCartManager()->getCart();
     }
 }
