@@ -86,6 +86,7 @@ class CartManager implements CartManagerInterface{
     public function removeCartItem(CartItemInterface $item){
         $cart = $this->getCart();
         $cart->removeCartItem($item);
+        $this->sessionManager->getEntityManager()->remove($item);
         
         $event = new CartEvent($cart);
         $this->eventDispatcher->dispatch(CartEvents::ITEM_REMOVED, $event);

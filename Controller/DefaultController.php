@@ -72,6 +72,23 @@ class DefaultController extends Controller
     }
     
     /**
+     * @Route("/cart/remove/{product_id}", name="zb_cart_remove_item")
+     */
+    public function removeItemAction(Request $request, $product_id){
+        
+        $cartManager = $this->getCartManager();
+        $cartItems = $cartManager->getCart()->getCartItems();
+        
+        foreach($cartItems as $cartItem){
+            if($cartItem->getProduct()->getId() == $product_id)
+                $cartManager->removeCartItem($cartItem);
+        }
+        
+        
+        return $this->redirectToRoute('zb_cart_index');
+    }
+    
+    /**
      * @Route("/cart/save", name="zb_cart_save")
      */
     public function saveAction(Request $request){
