@@ -23,8 +23,9 @@ class EventSubscriber implements EventSubscriberInterface
         return array(
             'zb_cart.created' => ['onCartCreate', 0],
             'zb_cart.set' => ['onCartSet', 0],
-            'zb_cart.item_updated' => [ 'onCartUpdate', 0 ],
+            'zb_cart.item_updated' => [ 'onItemAdd', 0 ],
             'zb_cart.item_added' => [ 'onCartUpdate', 0 ],
+            'zb_cart.item_removed' => [ 'onItemRemoved', 0 ],
             );
     }
 
@@ -42,10 +43,20 @@ class EventSubscriber implements EventSubscriberInterface
         // $session->set('zb_cart', $event->getCart());
     }
     
-    public function onCartUpdate(CartEvent $event){
+   public function onCartUpdate(CartEvent $event){
         
+        $cart = $event->getCart();
+        $cart->setCartSubTotal();
         
-        $this->entityManager->persist($event->getCart());
+        $this->entityManager->persist($cart);
         $this->entityManager->flush();
+    }
+    
+    public function onItemRemoved(CartEvent $event){
+        $this->onCartUpdate($event);
+    }
+    
+    public function onItemAdd(CartEvent $event){
+        $this->onCartUpdate($event);
     }
 }

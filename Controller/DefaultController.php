@@ -15,8 +15,7 @@ class DefaultController extends Controller
     /**
      * @Route("/cart", name="zb_cart_index")
      */
-    public function indexAction()
-    {
+    public function indexAction(){
         
         return $this->render('default/index.html.twig', array(
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),

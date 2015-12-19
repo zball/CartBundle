@@ -31,4 +31,8 @@ class SessionManager{
     public function getSession(){
         return $this->session;
     }
+    
+    public function getEntityManager(){
+        return $this->entityManager;
+    }
 }

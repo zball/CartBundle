@@ -71,7 +71,6 @@ class CartManager implements CartManagerInterface{
             $cartItem->setQuantity($item->getQuantity());
             
             
-            
             $event = new CartEvent($cart);
             $this->eventDispatcher->dispatch(CartEvents::ITEM_UPDATED, $event);
         }else{
@@ -82,9 +81,14 @@ class CartManager implements CartManagerInterface{
             $event = new CartEvent($cart);
             $this->eventDispatcher->dispatch(CartEvents::ITEM_ADDED, $event);
         }
+    }
+    
+    public function removeCartItem(CartItemInterface $item){
+        $cart = $this->getCart();
+        $cart->removeCartItem($item);
         
-        
-        
+        $event = new CartEvent($cart);
+        $this->eventDispatcher->dispatch(CartEvents::ITEM_REMOVED, $event);
     }
     
     public function productAlreadyInCart(ProductInterface $product){
@@ -102,6 +106,15 @@ class CartManager implements CartManagerInterface{
     
     public function emptyCart(){
         $cart = $this->getCart();
-        $cart->setCartItems(array());
+        $entityManager = $this->sessionManager->getEntityManager();
+        
+        $cartItems = $cart->getCartItems();
+        foreach($cartItems as $item){
+            $cart->removeCartItem($item);
+            $entityManager->remove($item);
+        }
+        
+        $event = new CartEvent($cart);
+        $this->eventDispatcher->dispatch(CartEvents::ITEM_UPDATED, $event);
     }
 }
